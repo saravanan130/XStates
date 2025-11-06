@@ -1,0 +1,29 @@
+.citySelector{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 5%;
+}
+
+.dropdowns {
+  display: flex;
+  justify-content: center;
+  height: 80%;
+  gap: 3%;
+  width: auto;         /* 👈 let width depend on content */
+  min-width: fit-content;
+  padding: 10px;
+}
+.dropdown {
+    height:fit-content;
+    padding: 7px;
+}
+
+.highlight{
+    font-size:140%;
+}
+.fade{
+    opacity: 0.5;
+}
