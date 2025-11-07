@@ -24,7 +24,7 @@ const CitySelector = () => {
     if (selectedCountries) {
       axios
         .get(
-          `https://crio-location-selector.onrender.com/country/${selectedCountries.trim()}/states`
+          `https://location-selector.labs.crio.do/country=${selectedCountries}/states`
         )
         .then((response) => {
           setStates(response.data);
