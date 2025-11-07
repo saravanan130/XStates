@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styles from "./CitySelector.module.css";
 import axios from "axios";
+
 const CitySelector = () => {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+
   const [selectedCountries, setSelectedCountries] = useState("");
   const [selectedStates, setSelectedStates] = useState("");
   const [selectedCities, setSelectedCities] = useState("");
 
   useEffect(() => {
     axios
-      .get("https://crio-location-selector.onrender.com/countries")
-      .then((response) => {
-        setCountries(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching countires: ", error);
-      });
+      .get("https://location-selector.labs.crio.do/countries")
+      .then((res) => setCountries(res.data))
+      .catch((err) => console.error("Error fetching countries:", err));
   }, []);
 
   useEffect(() => {
@@ -26,15 +24,13 @@ const CitySelector = () => {
         .get(
           `https://location-selector.labs.crio.do/country=${selectedCountries}/states`
         )
-        .then((response) => {
-          setStates(response.data);
-          setSelectedStates(""); // reset state
+        .then((res) => {
+          setStates(res.data);
+          setSelectedStates("");
           setCities([]);
-          setSelectedCities(""); // reset city
+          setSelectedCities("");
         })
-        .catch((error) => {
-          console.error("Error fetching states: ", error);
-        });
+        .catch((err) => console.error("Error fetching states:", err));
     }
   }, [selectedCountries]);
 
@@ -42,15 +38,13 @@ const CitySelector = () => {
     if (selectedCountries && selectedStates) {
       axios
         .get(
-          `https://crio-location-selector.onrender.com/country/${selectedCountries}/state/${selectedStates}/cities`
+          `https://location-selector.labs.crio.do/country=${selectedCountries}/state=${selectedStates}/cities`
         )
-        .then((response) => {
-          setCities(response.data);
-          setSelectedCities(""); // reset city
+        .then((res) => {
+          setCities(res.data);
+          setSelectedCities("");
         })
-        .catch((error) => {
-          console.error("Error fetching cities: ", error);
-        });
+        .catch((err) => console.error("Error fetching cities:", err));
     }
   }, [selectedCountries, selectedStates]);
 
@@ -64,7 +58,6 @@ const CitySelector = () => {
           onChange={(e) => setSelectedCountries(e.target.value)}
         >
           <option disabled value="">
-            {" "}
             Select Country
           </option>
           {countries.map((country) => (
@@ -73,13 +66,13 @@ const CitySelector = () => {
             </option>
           ))}
         </select>
+
         <select
           className={styles.dropdown}
           value={selectedStates}
           onChange={(e) => setSelectedStates(e.target.value)}
         >
           <option disabled value="">
-            {" "}
             Select State
           </option>
           {states.map((state) => (
@@ -88,13 +81,14 @@ const CitySelector = () => {
             </option>
           ))}
         </select>
+
         <select
           className={styles.dropdown}
           value={selectedCities}
           onChange={(e) => setSelectedCities(e.target.value)}
         >
-          <option disabled value={""}>
-            Select city
+          <option disabled value="">
+            Select City
           </option>
           {cities.map((city) => (
             <option key={city} value={city}>
@@ -103,10 +97,11 @@ const CitySelector = () => {
           ))}
         </select>
       </div>
+
       {selectedCities && (
         <h2>
           You selected{" "}
-          <span className={styles.highlight}>{selectedCities}, </span>{" "}
+          <span className={styles.highlight}>{selectedCities}, </span>
           <span className={styles.fade}>
             {selectedStates}, {selectedCountries}
           </span>
@@ -117,3 +112,4 @@ const CitySelector = () => {
 };
 
 export default CitySelector;
+
